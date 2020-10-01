@@ -1,4 +1,6 @@
 import React, {Component} from 'react';
+import NewTodoForm from './NewTodoForm';
+import TodoList from './TodoList';
 
 import './App.css';
 
@@ -23,7 +25,7 @@ class App extends Component {
       })
 
   }
-  newTodoChange(event){
+  newTodoChanged(event){
       console.log(event.target.value);
       this.setState({newTodo: event.target.value})
   }
@@ -65,33 +67,20 @@ class App extends Component {
     <div className="App">
       <h3>{this.state.message}</h3>
 
-      <form onSubmit={(event)=>this.formSubmitted(event)}>
-          <label htmlFor="newTodo">New Todo</label>
-          <input onChange={(event)=>this.newTodoChange(event)} id="newTodo" name ="newTodo" value={this.state.newTodo}/>
-            <button type="Submit">Add Todo</button>
-      </form>
+      <NewTodoForm
+        newTodo={this.state.newTodo}
+        formSubmitted={this.formSubmitted.bind(this)}
+        newTodoChanged={this.newTodoChanged.bind(this)}
+      />
+
       <button onClick={()=>this.allDone()}>AllDone</button>
 
+      <TodoList
+        todos={this.state.todos}
+        toggleTodoDone={this.toggleTodoDone.bind(this)}
+        removeTodo={this.removeTodo.bind(this)}
 
-      <ul>
-        {this.state.todos.map((todo, index )=>{
-          return (
-            <li key={todo.title}>
-              <input 
-                onChange={(event)=>this.toggleTodoDone(event, index)} 
-                type="checkbox"
-                checked={todo.done}
-              />
-              {/*<span style={{textDecoration: todo.done?'line-through':'inherit'}}>{todo.title}
-              </span>
-            */}
-            <span className={todo.done?'done':''}>{todo.title}</span> 
-            <button onClick={()=>this.removeTodo(index)}>Remove</button>
-
-            </li>
-            )
-        })}
-      </ul>
+      />
 
     </div>
   );
